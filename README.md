@@ -15,13 +15,13 @@
 
 ### 简介
 
-ModInfoPanel 只处理 **mod 内容**（原版物品/流体/生物不动）：读取 CUCoreLib 与其他 mod 注册的物品、流体、自定义动物，把 `zh-CN.json` 风格的富文本信息块追加到悬停信息栏（原生提示与 UEI 菜单都支持）。
+ModInfoPanel 只处理 **mod 内容**（原版物品/流体/生物不动）：读取 CUCoreLib 与其他 mod 注册的物品、流体、自定义动物，把 [未知伤亡维基中文翻译项目](https://github.com/dodo23333/cu-chinese-wiki-translations) 风格的富文本信息块追加到悬停信息栏。
 
 ### 功能特性
 
 | 内容 | 显示位置 | 数据来源 |
 |------|----------|----------|
-| mod 物品 | 背包 / 拖拽 / 世界物品悬停（含 UEI 菜单） | `CUCoreLib.Registries.ItemRegistry` + `Item.GlobalItems` |
+| mod 物品 | 背包 / 拖拽 / 世界物品悬停 | `CUCoreLib.Registries.ItemRegistry` + `Item.GlobalItems` |
 | 容器内 mod 流体 | 物品信息栏 | `CUCoreLib.Registries.LiquidRegistry` |
 | 世界 mod 流体 | 流体悬停信息栏 | `CUCoreLib.Registries.LiquidTileRegistry` |
 | 自定义动物 | 生物悬停信息栏 | `CUCoreLib.Registries.BuildingEntityRegistry`（`Animal=true`） |
@@ -33,7 +33,6 @@ ModInfoPanel 只处理 **mod 内容**（原版物品/流体/生物不动）：�
 
 - **委托 IL 效果提取**：读取 `useAction`/`useLimbAction`（物品）与 `onDrink`/`onApplyToLimb`/`onInject`（液体）的 IL，支持两种乘法顺序、`Mathf.Min/Max/Clamp`、`*=`/`/=`，并递归提取 `CoUtils.DoTimedOp` 等嵌套委托的延迟效果（前缀 `延迟`）。
 - **JSON 缓存**：首次生成 `InfoCache/{kind}/{mod}/{id}.json`，之后启动只校验变化，未变不写盘；`overrides.json` 可手写覆盖，`acquisition.json` 可编辑获取来源映射，`CustomData` 供 mod 作者补充效果行。
-- **UEI 兼容**：UEI 使用自己的提示构建流程，插件会反射挂接 `UeiPanel.BuildTooltipDescription` 追加同样信息；未安装 UEI 时自动跳过。
 
 ### 生成示例（物品）
 
@@ -51,7 +50,7 @@ ModInfoPanel 只处理 **mod 内容**（原版物品/流体/生物不动）：�
 <color=#9e9e9e>来源模组：com.yourName.CUDrugEx</color>
 ```
 
-颜色约定：蓝=装备/体积数值，绿=效果数值与数据，橙=腐败/消耗，黄=获取/制作，`<color=orange>`=特点单行，灰=来源模组。
+颜色约定（调色板来源：[未知伤亡维基中文翻译项目](https://github.com/dodo23333/cu-chinese-wiki-translations)）：蓝 `#91a7ff`=装备/体积数值，绿 `#72d572`=效果数值与数据，橙 `#ffa726`=腐败/消耗，黄 `#ffee58`=获取/制作，红 `#e84e40`=生物生命，`<color=orange>`=特点单行，灰 `#9e9e9e`=来源模组。
 
 ### 安装
 
@@ -127,7 +126,6 @@ BepInEx/plugins/ModInfoPanel/
 
 ### 兼容性
 
-- **UEI**：可选；检测到 `UeiPanel` 时自动挂接菜单提示补丁。
 - **原版**：不修改原版物品/流体/生物。
 - **联机**：缓存为本地生成，各端各自生成；`overrides.json` / `acquisition.json` 如需一致请自行同步。
 
@@ -152,7 +150,6 @@ dotnet build -c Release -p:GameRoot="D:\Steam\steamapps\common\Casualties Unknow
 ### 已知限制
 
 - IL 效果提取只支持简单模式（常量加减、两种乘法顺序、`Mathf.Min/Max/Clamp`、`*=`/`/=`、嵌套委托）；循环、随机、辅助方法内的复杂逻辑不会提取，可用 `CustomData` 或 `overrides.json` 补充。
-- UEI 菜单条目没有实时 `Item` 实例，不显示容器内动态液体（原生悬停仍显示）。
 - 获取来源只显示可验证项：CUCoreLib `DropPool`、交易（分类在交易池且价值>0）、`acquisition.json` 映射。
 
 ### 许可证与致谢
@@ -161,19 +158,23 @@ dotnet build -c Release -p:GameRoot="D:\Steam\steamapps\common\Casualties Unknow
 
 硬依赖 [CUCoreLib](https://github.com/jimmyking9999999/CUCoreLib)（LGPL-3.0），本插件仅以独立 DLL 形式动态引用，未内嵌其代码或二进制。
 
+#### 致谢
+
+- [未知伤亡维基中文翻译项目](https://github.com/dodo23333/cu-chinese-wiki-translations)（MIT）：信息栏颜色与排版风格参考该项目。
+
 ---
 
 ## English
 
 ### Overview
 
-ModInfoPanel only touches **mod content** (vanilla items/liquids/creatures are left alone): it reads items, liquids and custom animals registered through CUCoreLib and other mods, and appends a `zh-CN.json`-style rich-text info block to hover tooltips (both the native tooltip and the UEI menu).
+ModInfoPanel only touches **mod content** (vanilla items/liquids/creatures are left alone): it reads items, liquids and custom animals registered through CUCoreLib and other mods, and appends an info block styled after the [CU Chinese Wiki Translations](https://github.com/dodo23333/cu-chinese-wiki-translations) project to hover tooltips.
 
 ### Features
 
 | Content | Where | Source |
 |---------|-------|--------|
-| Mod items | Inventory / drag / world hover (incl. UEI menu) | `CUCoreLib.Registries.ItemRegistry` + `Item.GlobalItems` |
+| Mod items | Inventory / drag / world hover | `CUCoreLib.Registries.ItemRegistry` + `Item.GlobalItems` |
 | Mod liquids in containers | Item tooltip | `CUCoreLib.Registries.LiquidRegistry` |
 | Mod world fluids | Fluid hover tooltip | `CUCoreLib.Registries.LiquidTileRegistry` |
 | Custom animals | Creature hover tooltip | `CUCoreLib.Registries.BuildingEntityRegistry` (`Animal=true`) |
@@ -185,7 +186,6 @@ Also:
 
 - **Delegate IL extraction**: reads `useAction`/`useLimbAction` (items) and `onDrink`/`onApplyToLimb`/`onInject` (liquids), supporting both multiplication orders, `Mathf.Min/Max/Clamp`, `*=`/`/=`, and recursively scans nested delegates (e.g. `CoUtils.DoTimedOp` delayed effects, prefixed `延迟`).
 - **JSON cache**: generated once at `InfoCache/{kind}/{mod}/{id}.json`; later launches only rewrite changed entries. `overrides.json` for manual text, `acquisition.json` for editable loot-source mapping, `CustomData` for mod authors.
-- **UEI support**: UEI builds its own tooltip; the plugin reflectively hooks `UeiPanel.BuildTooltipDescription` and appends the same block. Skipped automatically when UEI is absent.
 
 ### Example output (item)
 
@@ -237,7 +237,6 @@ BepInEx/plugins/ModInfoPanel/
 
 ### Compatibility
 
-- **UEI**: optional; the menu tooltip patch is installed only when `UeiPanel` exists.
 - **Vanilla content**: untouched.
 - **Multiplayer**: caches are generated locally per client; sync `overrides.json` / `acquisition.json` manually if you want identical text.
 
@@ -262,7 +261,6 @@ Output: `bin\Release\ModInfoPanel.dll` and `bin\Release\Locale\`.
 ### Known limitations
 
 - IL extraction covers simple patterns only (constant add/sub, both multiplication orders, `Mathf.Min/Max/Clamp`, `*=`/`/=`, nested delegates). Loops/random/helper-method logic is not extracted; use `CustomData` or `overrides.json`.
-- UEI menu entries have no live `Item`, so dynamic container liquids are not shown there (the native tooltip still shows them).
 - Acquisition lines only list verifiable sources (CUCoreLib `DropPool`, traders, `acquisition.json` mapping).
 
 ### License & credits
@@ -270,3 +268,7 @@ Output: `bin\Release\ModInfoPanel.dll` and `bin\Release\Locale\`.
 Licensed under **LGPL-3.0** (see [LICENSE](LICENSE)).
 
 Hard dependency: [CUCoreLib](https://github.com/jimmyking9999999/CUCoreLib) (LGPL-3.0). This plugin references it as a separate DLL only and does not embed its code or binaries.
+
+#### Credits
+
+- [CU Chinese Wiki Translations](https://github.com/dodo23333/cu-chinese-wiki-translations) (MIT): the tooltip colors and layout style follow this project.

@@ -45,11 +45,12 @@ namespace ModInfoPanel.Build
             ItemDrop[] alwaysDrop,
             ItemDrop[] randomDrop)
         {
+            List<string> red = new List<string>();
             List<string> green = new List<string>();
             List<string> yellow = new List<string>();
             List<string> traits = new List<string>();
 
-            green.Add(Format.Pair(Loc.T("creature_health", "生命"), healthText));
+            red.Add(Format.Pair(Loc.T("creature_health", "生命"), healthText));
 
             List<string> drops = new List<string>();
             AppendDrops(drops, alwaysDrop, true);
@@ -97,6 +98,7 @@ namespace ModInfoPanel.Build
             }
 
             StringBuilder sb = new StringBuilder();
+            Format.AppendBlock(sb, Format.Red, red);
             Format.AppendBlock(sb, Format.Green, green);
             Format.AppendBlock(sb, Format.Yellow, yellow);
 

@@ -11,6 +11,7 @@ namespace ModInfoPanel.Build
         public const string Orange = "#ffa726";
         public const string Yellow = "#ffee58";
         public const string Blue = "#91a7ff";
+        public const string Red = "#e84e40";
         public const string Feature = "orange";
         public const string Gray = "#9e9e9e";
         public const string Bar = "┃";
