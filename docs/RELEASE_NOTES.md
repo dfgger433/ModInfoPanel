@@ -58,6 +58,7 @@ ModInfoPanel 只处理 **mod 内容**（原版物品/流体/生物不动）：�
 - 本项目：**LGPL-3.0**。
 - 硬依赖 [CUCoreLib](https://github.com/jimmyking9999999/CUCoreLib)（LGPL-3.0），仅以独立 DLL 形式动态引用。
 - 感谢 [未知伤亡维基中文翻译项目](https://github.com/dodo23333/cu-chinese-wiki-translations)（MIT）：信息栏颜色与排版风格参考该项目。
+- 感谢 [DeepSeek](https://www.deepseek.com/)：本插件在开发过程中使用了 DeepSeek 模型辅助。
 
 ---
 
@@ -106,3 +107,4 @@ ModInfoPanel only touches **mod content** (vanilla items/liquids/creatures are l
 - This project: **LGPL-3.0**.
 - Hard dependency [CUCoreLib](https://github.com/jimmyking9999999/CUCoreLib) (LGPL-3.0), referenced as a separate DLL only.
 - Thanks to the [CU Chinese Wiki Translations](https://github.com/dodo23333/cu-chinese-wiki-translations) project (MIT): the tooltip colors and layout style follow it.
+- Thanks to [DeepSeek](https://www.deepseek.com/): this plugin was developed with the assistance of the DeepSeek model.

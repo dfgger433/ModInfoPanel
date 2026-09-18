@@ -161,6 +161,7 @@ dotnet build -c Release -p:GameRoot="D:\Steam\steamapps\common\Casualties Unknow
 #### 致谢
 
 - [未知伤亡维基中文翻译项目](https://github.com/dodo23333/cu-chinese-wiki-translations)（MIT）：信息栏颜色与排版风格参考该项目。
+- [DeepSeek](https://www.deepseek.com/)：本插件在开发过程中使用了 DeepSeek 模型辅助。
 
 ---
 
@@ -272,3 +273,4 @@ Hard dependency: [CUCoreLib](https://github.com/jimmyking9999999/CUCoreLib) (LGP
 #### Credits
 
 - [CU Chinese Wiki Translations](https://github.com/dodo23333/cu-chinese-wiki-translations) (MIT): the tooltip colors and layout style follow this project.
+- [DeepSeek](https://www.deepseek.com/): this plugin was developed with the assistance of the DeepSeek model.
