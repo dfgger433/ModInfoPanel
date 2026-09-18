@@ -2,6 +2,9 @@
 bin/
 obj/
 
+# Release artifacts
+dist/
+
 # IDE
 .vs/
 .idea/
