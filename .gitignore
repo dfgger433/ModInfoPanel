@@ -1,0 +1,17 @@
+# Build output
+bin/
+obj/
+
+# IDE
+.vs/
+.idea/
+*.user
+*.suo
+
+# Runtime generated data
+InfoCache/
+overrides.json
+acquisition.json
+
+# Logs
+*.log
