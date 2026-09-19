@@ -7,7 +7,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyName>ModInfoPanel</AssemblyName>
     <RootNamespace>ModInfoPanel</RootNamespace>
-    <Version>1.7.2</Version>
+    <Version>1.7.3</Version>
     <Description>Auto-generate item/liquid/creature info panels for mod content (Casualties: Unknown)</Description>
     <GameRoot Condition="'$(GameRoot)' == ''">..\..</GameRoot>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

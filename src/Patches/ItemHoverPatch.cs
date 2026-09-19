@@ -47,23 +47,22 @@ namespace ModInfoPanel.Patches
                 }
 
                 string id = ModContentIndex.NormalizeId(item.id);
-                string auto = "";
-                if (cfg.ShowItems.Value)
-                {
-                    auto += InfoCache.GetItemText(id, stats) ?? "";
-                }
+                string auto = cfg.ShowItems.Value ? (InfoCache.GetItemText(id, stats) ?? "") : "";
+                string desc = __result.Item2 ?? "";
 
-                if (cfg.ShowLiquids.Value)
+                bool expanded = PlayerCamera.alwaysExpandDescriptions
+                                || Input.GetKey(KeyBinds.GetBind("expanddesc"));
+                if (cfg.ShowLiquids.Value && expanded)
                 {
-                    auto += InfoCache.BuildContainerLiquidBlock(item.GetComponent<WaterContainerItem>()) ?? "";
+                    desc = InfoCache.InjectContainerLiquids(desc, item.GetComponent<WaterContainerItem>());
                 }
 
                 if (string.IsNullOrEmpty(auto))
                 {
+                    __result.Item2 = desc;
                     return;
                 }
 
-                string desc = __result.Item2 ?? "";
                 if (desc.IndexOf(Marker, StringComparison.Ordinal) >= 0)
                 {
                     return;

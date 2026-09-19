@@ -22,7 +22,7 @@ ModInfoPanel 只处理 **mod 内容**（原版物品/流体/生物不动）：�
 | 内容 | 显示位置 | 数据来源 |
 |------|----------|----------|
 | mod 物品 | 背包 / 拖拽 / 世界物品悬停 | `CUCoreLib.Registries.ItemRegistry` + `Item.GlobalItems` |
-| 容器内 mod 流体 | 物品信息栏 | `CUCoreLib.Registries.LiquidRegistry` |
+| mod 流体 | 按住 Shift 展开时插入到对应液体描述之后、性质之前 | `CUCoreLib.Registries.LiquidRegistry` |
 | 世界 mod 流体 | 流体悬停信息栏 | `CUCoreLib.Registries.LiquidTileRegistry` |
 | 自定义动物 | 生物悬停信息栏 | `CUCoreLib.Registries.BuildingEntityRegistry`（`Animal=true`） |
 | 配方 | `制作(INT)：材料=结果`（含 mod 配方） | `Recipes.recipes`（进入对局后增量刷新） |
@@ -33,6 +33,7 @@ ModInfoPanel 只处理 **mod 内容**（原版物品/流体/生物不动）：�
 
 - **委托 IL 效果提取**：读取 `useAction`/`useLimbAction`（物品）与 `onDrink`/`onApplyToLimb`/`onInject`（液体）的 IL，支持两种乘法顺序、`Mathf.Min/Max/Clamp`、`*=`/`/=`，并递归提取 `CoUtils.DoTimedOp` 等嵌套委托的延迟效果（前缀 `延迟`）。
 - **JSON 缓存**：首次生成 `InfoCache/{kind}/{mod}/{id}.json`，之后启动只校验变化，未变不写盘；`overrides.json` 可手写覆盖，`acquisition.json` 可编辑获取来源映射，`CustomData` 供 mod 作者补充效果行。
+- **液体信息位置**：折叠时不显示；按住 Shift（展开描述）时插入到对应液体的描述之后、`具有性质：…` 之前；不生成液体制作行（汉化描述自带）。
 
 ### 生成示例（物品）
 
@@ -107,7 +108,7 @@ BepInEx/plugins/ModInfoPanel/
 |----|------|------|
 | `General.Enabled` | true | 总开关 |
 | `General.ShowItems` | true | mod 物品信息 |
-| `General.ShowLiquids` | true | mod 流体信息 |
+| `General.ShowLiquids` | true | mod 流体信息（Shift 详情中对应液体描述之后 / 世界流体悬停） |
 | `General.ShowCreatures` | true | 自定义动物信息 |
 | `General.ExpandOnly` | false | 仅按住展开描述键（Shift）时显示 |
 | `General.DescriptionMode` | Append | `Append` / `FillMissing` / `Replace` |
@@ -176,7 +177,7 @@ ModInfoPanel only touches **mod content** (vanilla items/liquids/creatures are l
 | Content | Where | Source |
 |---------|-------|--------|
 | Mod items | Inventory / drag / world hover | `CUCoreLib.Registries.ItemRegistry` + `Item.GlobalItems` |
-| Mod liquids in containers | Item tooltip | `CUCoreLib.Registries.LiquidRegistry` |
+| Mod liquids | Inserted after the matching liquid's description and before its qualities, while Shift-expanded | `CUCoreLib.Registries.LiquidRegistry` |
 | Mod world fluids | Fluid hover tooltip | `CUCoreLib.Registries.LiquidTileRegistry` |
 | Custom animals | Creature hover tooltip | `CUCoreLib.Registries.BuildingEntityRegistry` (`Animal=true`) |
 | Recipes | `Craft(INT): ingredients = result` (incl. mod recipes) | `Recipes.recipes` (refreshed after world-gen) |
@@ -187,6 +188,7 @@ Also:
 
 - **Delegate IL extraction**: reads `useAction`/`useLimbAction` (items) and `onDrink`/`onApplyToLimb`/`onInject` (liquids), supporting both multiplication orders, `Mathf.Min/Max/Clamp`, `*=`/`/=`, and recursively scans nested delegates (e.g. `CoUtils.DoTimedOp` delayed effects, prefixed `延迟`).
 - **JSON cache**: generated once at `InfoCache/{kind}/{mod}/{id}.json`; later launches only rewrite changed entries. `overrides.json` for manual text, `acquisition.json` for editable loot-source mapping, `CustomData` for mod authors.
+- **Liquid info placement**: hidden when collapsed; while Shift-expanded it is inserted after the matching liquid's description and before its qualities. Liquid recipe lines are not generated (the localized description already has them).
 
 ### Example output (item)
 

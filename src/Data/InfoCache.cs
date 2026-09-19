@@ -496,11 +496,15 @@ namespace ModInfoPanel.Data
             return SubstituteHealth(text, def, entity);
         }
 
-        public static string BuildContainerLiquidBlock(WaterContainerItem container)
+        /// <summary>
+        /// 展开（Shift）时，把自定义液体的信息块插入到该液体“描述之后、性质之前”。
+        /// 折叠状态下不调用本方法。
+        /// </summary>
+        public static string InjectContainerLiquids(string description, WaterContainerItem container)
         {
-            if (container == null)
+            if (string.IsNullOrEmpty(description) || container == null)
             {
-                return null;
+                return description;
             }
 
             List<LiquidStack> stack;
@@ -510,15 +514,16 @@ namespace ModInfoPanel.Data
             }
             catch
             {
-                return null;
+                return description;
             }
 
             if (stack == null || stack.Count == 0)
             {
-                return null;
+                return description;
             }
 
-            StringBuilder sb = new StringBuilder();
+            List<KeyValuePair<int, string>> insertions = new List<KeyValuePair<int, string>>();
+            int searchFrom = 0;
             foreach (LiquidStack entry in stack)
             {
                 if (entry == null || string.IsNullOrWhiteSpace(entry.liquidId))
@@ -532,18 +537,108 @@ namespace ModInfoPanel.Data
                 }
 
                 string text = GetLiquidText(entry.liquidId, info);
-                if (!string.IsNullOrEmpty(text))
+                if (string.IsNullOrEmpty(text))
                 {
-                    sb.Append(text).Append('\n');
+                    continue;
+                }
+
+                string name = ResolveGameLiquidName(entry.liquidId);
+                string anchor = name + " (" + Mathf.RoundToInt(entry.amount) + "mL)";
+                int start = description.IndexOf(anchor, searchFrom, StringComparison.Ordinal);
+                if (start < 0)
+                {
+                    start = description.IndexOf(anchor, StringComparison.Ordinal);
+                }
+
+                int position;
+                if (start >= 0)
+                {
+                    searchFrom = start + anchor.Length;
+                    position = FindLiquidInsertPosition(description, searchFrom);
+                }
+                else
+                {
+                    position = FindWeightLinePosition(description);
+                    if (position < 0)
+                    {
+                        position = description.Length;
+                    }
+
+                    Plugin.Debug("[InfoCache] 未在描述中找到液体行: " + anchor);
+                }
+
+                insertions.Add(new KeyValuePair<int, string>(position, text));
+            }
+
+            if (insertions.Count == 0)
+            {
+                return description;
+            }
+
+            insertions.Sort((a, b) => b.Key.CompareTo(a.Key));
+            StringBuilder sb = new StringBuilder(description);
+            foreach (KeyValuePair<int, string> insertion in insertions)
+            {
+                sb.Insert(insertion.Key, insertion.Value);
+            }
+
+            return sb.ToString();
+        }
+
+        private static int FindLiquidInsertPosition(string description, int from)
+        {
+            // mod 描述行：\n<alpha=#88>描述<alpha=#FF>\n → 插到 <alpha=#FF>\n 之后（性质行之前）。
+            int descStart = description.IndexOf("\n<alpha=#88>", from, StringComparison.Ordinal);
+            if (descStart >= 0)
+            {
+                int descEnd = description.IndexOf("<alpha=#FF>\n", descStart, StringComparison.Ordinal);
+                if (descEnd >= 0)
+                {
+                    return descEnd + "<alpha=#FF>\n".Length;
                 }
             }
 
-            if (sb.Length == 0)
+            // 回退：该液体组的末尾（下一个颜色行之前）。
+            int nextLine = description.IndexOf("\n<color=#", from, StringComparison.Ordinal);
+            return nextLine >= 0 ? nextLine + 1 : description.Length;
+        }
+
+        private static int FindWeightLinePosition(string description)
+        {
+            int weight = description.IndexOf("<color=#ffffff><sprite index=0", StringComparison.Ordinal);
+            if (weight < 0)
             {
-                return null;
+                return -1;
             }
 
-            return sb.ToString().TrimEnd('\n');
+            int lineStart = description.LastIndexOf('\n', Math.Max(0, weight - 1));
+            return lineStart >= 0 ? lineStart + 1 : weight;
+        }
+
+        private static string ResolveGameLiquidName(string id)
+        {
+            try
+            {
+                if (global::Liquids.Registry != null
+                    && global::Liquids.Registry.TryGetValue(id, out LiquidType type)
+                    && type != null)
+                {
+                    string name = type.localeFromItem
+                        ? global::Locale.GetItem(id)
+                        : global::Locale.GetOther(type.localeName);
+                    if (!string.IsNullOrWhiteSpace(name))
+                    {
+                        return name;
+                    }
+                }
+
+                string fallback = global::Locale.GetOther(id);
+                return string.IsNullOrWhiteSpace(fallback) ? id : fallback;
+            }
+            catch
+            {
+                return id;
+            }
         }
 
         private static void EnsureReady()

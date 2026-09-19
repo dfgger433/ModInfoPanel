@@ -49,7 +49,7 @@ namespace ModInfoPanel.Configuration
 
             ShowLiquids = cfg.Bind(
                 "General", "ShowLiquids", true,
-                "为 mod 流体（容器内液体 / 世界流体）追加自动生成的信息。");
+                "为 mod 流体追加自动生成的信息：仅在按住展开键（Shift）时显示在对应液体描述之后、性质之前；世界流体悬停与液体条目始终生效。");
 
             ShowCreatures = cfg.Bind(
                 "General", "ShowCreatures", true,

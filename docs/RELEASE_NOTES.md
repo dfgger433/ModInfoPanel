@@ -1,15 +1,15 @@
-# ModInfoPanel v1.7.2
+# ModInfoPanel v1.7.3
 
 > 自动为 mod 内容生成信息栏 / Auto-generated info panels for mod content
 > 《Casualties: Unknown》 / BepInEx 5.4.x / 硬依赖 CUCoreLib
 
 ## 发布文件
 
-- `ModInfoPanel-1.7.2.zip`
+- `ModInfoPanel-1.7.3.zip`
   - `BepInEx/plugins/ModInfoPanel/ModInfoPanel.dll`
   - `BepInEx/plugins/ModInfoPanel/Locale/locale.zh-CN.json`
   - `BepInEx/plugins/ModInfoPanel/Locale/locale.EN.json`
-- SHA256：`fc1489a817d59ddb68dc57f22e85f5fd46b0f6a9d53d9dd6b07fa09c4f607952`
+- SHA256：`b8b8da88bdb6d6b42ee094bb53726b214a5244797641965ee537a72fd2d13500`
 
 ---
 
@@ -25,22 +25,21 @@ ModInfoPanel 只处理 **mod 内容**（原版物品/流体/生物不动）：�
 - **委托 IL 效果提取**：读取 `useAction`/`useLimbAction`（物品）与 `onDrink`/`onApplyToLimb`/`onInject`（液体）的 IL；支持两种乘法顺序、`Mathf.Min/Max/Clamp`、`*=`/`/=`，并递归提取 `CoUtils.DoTimedOp` 等嵌套委托的延迟效果（前缀 `延迟`）。
 - **状态效果**：按物品本次数值匹配状态等级说明（如 `大麻素 +10（轻度大麻影响：…）`）；自定义 moodle 悬停框追加 `当前 / 阈值 / 相关物品`。
 - **配方行**：`制作(INT)：材料=结果`，含 mod 配方，进入对局后增量刷新。
-- **流体**：容器内 mod 流体与自定义世界流体。
+- **流体**：容器内 mod 流体仅在按住 Shift 展开时显示，插入到对应液体描述之后、`具有性质：…` 之前；自定义世界流体悬停显示。不生成液体制作行（汉化描述自带）。
 - **自定义动物**：生命（红）、掉落、生成、特点。
 - **JSON 缓存**：首次生成 `InfoCache/{kind}/{mod}/{id}.json`，之后只校验变化，未变不写盘。
 - **手工覆盖**：`overrides.json`（永不自动改写）、`acquisition.json`（分类→获取来源，可编辑热重载）、`CustomData` 约定（`effects` / `info` / `acquire` / `features`）。
 
 ### 本版变更
 
-- 生物「生命」行改为项目调色板红 `#e84e40`。
-- 修复液体效果行重复的 `(每100mL)`。
-- 文档：颜色规范引用与致谢更新。
+- **液体信息显示调整**：折叠时不显示；按住 Shift（展开描述）时插入到对应液体的描述之后、性质之前；不再在容器信息栏末尾单独显示；不生成液体制作行。
+- 其余沿用 v1.7.2：生物生命红色 `#e84e40`、修复重复 `(每100mL)`、文档风格与致谢更新。
 
 ### 安装
 
 1. 安装 **BepInEx 5.4.x**。
 2. 安装 **[CUCoreLib](https://github.com/jimmyking9999999/CUCoreLib)**（硬依赖）：`CUCoreLib.dll` → `BepInEx/plugins/`。
-3. 解压 `ModInfoPanel-1.7.2.zip` 到游戏根目录（即 `BepInEx/plugins/ModInfoPanel/…`）。
+3. 解压 `ModInfoPanel-1.7.3.zip` 到游戏根目录（即 `BepInEx/plugins/ModInfoPanel/…`）。
 
 ### 依赖与兼容
 
@@ -74,22 +73,21 @@ ModInfoPanel only touches **mod content** (vanilla items/liquids/creatures are l
 - **Delegate IL extraction**: reads `useAction`/`useLimbAction` (items) and `onDrink`/`onApplyToLimb`/`onInject` (liquids); supports both multiplication orders, `Mathf.Min/Max/Clamp`, `*=`/`/=`, and recursively scans nested delegates (e.g. `CoUtils.DoTimedOp` delayed effects, prefixed `延迟`).
 - **Status effects**: level description matched by the item's value (e.g. `THC +10 (Mild cannabis effect: …)`); moodle tooltips gain `Current / Thresholds / Related items`.
 - **Recipes**: `Craft(INT): ingredients = result`, including mod recipes, refreshed after world-gen.
-- **Liquids**: mod liquids inside containers and custom world fluids.
+- **Liquids**: mod liquids inside containers are shown only while Shift-expanded, inserted after the matching liquid's description and before its qualities; custom world fluids show on hover. Liquid recipe lines are not generated (the localized description already has them).
 - **Custom animals**: health (red), drops, spawn, traits.
 - **JSON cache**: generated once at `InfoCache/{kind}/{mod}/{id}.json`; later launches only rewrite changed entries.
 - **Manual overrides**: `overrides.json`, `acquisition.json` (editable, hot-reloaded), and the `CustomData` convention (`effects` / `info` / `acquire` / `features`).
 
 ### Changes in this release
 
-- Creature `Health` line now uses the project palette red `#e84e40`.
-- Fixed duplicated `(per 100mL)` in liquid effect lines.
-- Docs: updated style reference and credits.
+- **Liquid info placement**: hidden when collapsed; while Shift-expanded it is inserted after the matching liquid's description and before its qualities; no longer appended at the end of the container tooltip; no liquid recipe lines.
+- Carried over from v1.7.2: creature health uses the palette red `#e84e40`; fixed duplicated `(per 100mL)`; updated style reference and credits.
 
 ### Installation
 
 1. Install **BepInEx 5.4.x**.
 2. Install **[CUCoreLib](https://github.com/jimmyking9999999/CUCoreLib)** (hard dependency): `CUCoreLib.dll` → `BepInEx/plugins/`.
-3. Extract `ModInfoPanel-1.7.2.zip` into the game root (i.e. `BepInEx/plugins/ModInfoPanel/…`).
+3. Extract `ModInfoPanel-1.7.3.zip` into the game root (i.e. `BepInEx/plugins/ModInfoPanel/…`).
 
 ### Dependencies & compatibility
 

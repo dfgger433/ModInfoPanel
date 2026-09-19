@@ -4,6 +4,6 @@ namespace ModInfoPanel
     {
         public const string PLUGIN_GUID = "com.local.modinfopanel";
         public const string PLUGIN_NAME = "ModInfoPanel";
-        public const string PLUGIN_VERSION = "1.7.2";
+        public const string PLUGIN_VERSION = "1.7.3";
     }
 }
